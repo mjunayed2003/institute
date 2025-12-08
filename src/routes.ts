@@ -1,10 +1,11 @@
 
-import type { Express, Request, Response } from 'express';
+import type { Express } from 'express';
+import userRoutes from './modules/users/user.route.js'
 
 
 export function setupUserRoutes(app: Express) {
     
 
-    // app.get('/api/users', );
+    app.use('/api/users', userRoutes);
 
 }
