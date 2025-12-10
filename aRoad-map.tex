@@ -1,0 +1,179 @@
+✅ User Module শেষ হলে এখন কোন মডিউল করবা?
+
+User module সাধারণত নিচের কাজগুলো থাকে:
+
+Register
+
+Login (JWT Auth)
+
+Profile update
+
+Role-based access (STUDENT / MENTOR / ADMIN)
+
+Password security
+
+Auth middleware
+
+➡️ যদি এগুলো শেষ হয়, তাহলে Next Step অবশ্যই "Course Module"।
+
+🚀 Next Step: Course Module (MOST IMPORTANT)
+
+Course Module typically contains:
+
+✔️ 1. Create Course (Admin / Mentor only)
+
+Title
+
+Description
+
+Category
+
+Price
+
+Thumbnail
+
+Level
+
+Tags
+
+✔️ 2. Get All Courses
+✔️ 3. Get Single Course (Slug Wise or ID Wise)
+✔️ 4. Update Course
+✔️ 5. Delete Course
+✔️ 6. Publish / Unpublish Course
+✔️ 7. Assign Mentor to a Course (Using Junction Table)
+
+Mentor add
+
+Mentor remove
+
+Show all mentors of a course
+
+🧩 এরপর যে Module করবা (Course শেষে)
+1️⃣ Module System (Course → Modules → Lessons)
+
+এই লজিক:
+
+Course → Modules → Lessons
+
+Module create
+
+Lesson create
+
+Content upload
+
+Video link, PDF upload
+
+Prisma relation:
+
+Course (1) -> (Many) Module
+Module (1) -> (Many) Lesson
+
+2️⃣ Enrollment System
+
+Student যখন Course কিনবে তখন:
+
+User → Enrollment → Course
+
+
+Enrollment API:
+
+Enroll student
+
+Check enrollment
+
+Student এর জন্য MyCourses লিস্ট দেখানো
+
+3️⃣ Payment System (Later)
+
+যখন enrolled data তৈরি থাকবে তখন payment integrate করা লাগবে।
+
+Stripe / SSLCommerz
+
+Order table
+
+4️⃣ Review + Rating System
+
+Course এর নিচে student review দিতে পারবে।
+
+5️⃣ Certificate System (Optional)
+
+Course complete → Certificate generate → PDF download
+
+💡 সোজা Roadmap দিচ্ছি
+Step	Module	Priority
+1	User Module (Auth)	✔️ Doing Now
+2	Course Module	⭐ Highest
+3	Mentor Assign System	⭐ Must
+4	Module + Lesson System	⭐ Important
+5	Enrollment System	⭐ Must
+6	Review + Rating	Medium
+7	Payment + Orders	High
+8	Certificate System	Optional
+9	Dashboard Analytics	Optional
+📌 তুমি যদি এখন "Course Module" শুরু করতে চাও
+
+আমি তোমাকে এগুলা বানিয়ে দিতে পারি:
+
+✔️ Course Schema (already done)
+✔️ Course Controller
+✔️ Course Routes
+✔️ Mentor Assign Service
+✔️ Prisma Queries
+✔️ Auth middleware for role checking
+
+(mentor/admin only)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { Router } from "express";
+import { userController } from "./user.controller.js";
+import { validate } from "../../../Middleware/validation.js";
+import { loginSchema, registerSchema } from "./user.validation.js";
+import { authenticate, authorize, AuthRequest } from "./user.middleware.js";
+import { UserRole } from "../../../generated/prisma/client.js";
+
+const router = Router();
+
+// Public routes
+router.post("/register", validate(registerSchema), userController.register);
+router.post("/login", validate(loginSchema), userController.login);
+
+// Admin routes
+router.get("/", authenticate, authorize([UserRole.ADMIN]), userController.getUsers);
+router.get("/:id", authenticate, authorize([UserRole.ADMIN]), userController.getOne);
+router.put("/:id", authenticate, authorize([UserRole.ADMIN]), userController.update);
+router.delete("/:id", authenticate, authorize([UserRole.ADMIN]), userController.remove);
+
+// Mentor routes (own profile only)
+router.get("/mentor/profile", authenticate, authorize([UserRole.MENTOR]), async (req: AuthRequest, res) => {
+  const user = await userController.getOne({ params: { id: req.user!.id } } as any, res);
+});
+router.put("/mentor/profile", authenticate, authorize([UserRole.MENTOR]), async (req: AuthRequest, res) => {
+  const user = await userController.update({ params: { id: req.user!.id }, body: req.body } as any, res);
+});
+
+// Student routes (own profile only)
+router.get("/student/profile", authenticate, authorize([UserRole.STUDENT]), async (req: AuthRequest, res) => {
+  const user = await userController.getOne({ params: { id: req.user!.id } } as any, res);
+});
+router.get("/student/courses", authenticate, authorize([UserRole.STUDENT]), async (req: AuthRequest, res) => {
+  const courses = await userController.getOne({ params: { id: req.user!.id } } as any, res); // এখানে enrollment include করে দিতে হবে service এ
+});
+
+export default router;
