@@ -1,18 +1,15 @@
-// src/routes/userRoutes.ts
+import { Router } from "express";
+import { userController } from "./user.controller.js";
+import { validate } from "../../../Middleware/validation.js";
+import { loginSchema, registerSchema } from "./user.validation.js";
 
-import express from 'express';
-// Controller functions গুলো ইম্পোর্ট করা হলো
-import { getAllUsers, getUserByEmail, createUser } from './user.controller.js'; 
+const router = Router();
 
-const router = express.Router();
-
-// Route: /users
-router.route('/')
-    .get(getAllUsers)    // GET /users -> সকল ইউজার
-    .post(createUser);   // POST /users -> নতুন ইউজার তৈরি
-
-// Route: /users/:email
-router.route('/:email')
-    .get(getUserByEmail); // GET /users/test@example.com -> নির্দিষ্ট ইউজার
+router.post("/register", validate(registerSchema), userController.register);
+router.post("/login", validate(loginSchema), userController.login);
+router.get("/", userController.getUsers);
+router.get("/:id", userController.getOne);
+router.put("/:id", userController.update);
+router.delete("/:id", userController.remove);
 
 export default router;

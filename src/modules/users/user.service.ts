@@ -1,52 +1,70 @@
-// src/services/userService.ts
+import bcrypt from "bcrypt";
+import prisma from "../../prisma/client.js";
+import type { CreateUserInput , LoginInput } from "./user.interface.js";
+import { generateToken } from "../../Utility/jwt.js";
 
-import prisma from '../../prisma/client.js'; // Prisma Client
+export const userService = {
+  // Register User
+  async registerUser(data: CreateUserInput) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
-// 1. GET (Read): সকল ইউজারকে খুঁজে বের করা
-export const findAllUsers = async () => {
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
+    const user = await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        passwordHash: hashedPassword,
+        phoneNumber: data.phoneNumber ?? null
+      },
+    });
+
+    return {
+      message: "User registered successfully",
+      user,
+    };
+  },
+
+// Login
+async loginUser(data: LoginInput) {
+  const user = await prisma.user.findUnique({ where: { email: data.email } });
+  if (!user) throw new Error("User not found!");
+
+  const isMatch = await bcrypt.compare(data.password, user.passwordHash);
+  if (!isMatch) throw new Error("Incorrect password!");
+
+  // Perfect JWT generation
+  const token = generateToken({
+    id: user.id,
+    role: user.role, // must be string or enum value
   });
-};
 
-// 2. GET (Read): ইমেইল দ্বারা একক ইউজার খুঁজে বের করা
-export const findUserByEmail = async (email: string) => {
-  return await prisma.user.findUnique({
-    where: { email },
-    include: { posts: true }, // পোস্টগুলোও সংযুক্ত করা হলো
-  });
-};
+  return {
+    message: "Login successful",
+    token,
+    user,
+  };
+},
 
-// 3. POST (Create): নতুন ইউজার তৈরি করা
-export const createNewUser = async (name: string, email: string) => {
-  return await prisma.user.create({
-    data: {
-      name,
-      email,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
-  });
-};
 
-// 4. PUT/PATCH (Update): ইউজার নাম আপডেট করা
-export const updateUserName = async (email: string, newName: string) => {
-  return await prisma.user.update({
-    where: { email },
-    data: { name: newName },
-  });
-};
+  // Get All Users
+  async getUsers() {
+    return prisma.user.findMany();
+  },
 
-// 5. DELETE: ইউজার মুছে ফেলা
-export const deleteUserByEmail = async (email: string) => {
-  return await prisma.user.delete({
-    where: { email },
-  });
+  // Get Single User
+  async getUserById(id: string) {
+    return prisma.user.findUnique({ where: { id } });
+  },
+
+  // Update User
+  async updateUser(id: string, data: any) {
+    return prisma.user.update({
+      where: { id },
+      data,
+    });
+  },
+
+  // Delete User
+  async deleteUser(id: string) {
+    return prisma.user.delete({ where: { id } });
+  },
 };

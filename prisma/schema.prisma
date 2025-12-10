@@ -15,19 +15,377 @@ datasource db {
 }
 
 
-// MongoDB Model Example:
-model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  name  String?
-  posts Post[]
+// ------------------------------------------
+// Enums (ফিক্সড অপশনসমূহ)
+// ------------------------------------------
+
+enum UserRole {
+  ADMIN
+  STUDENT
+  MENTOR
 }
 
-model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String   @db.ObjectId
-} 
+enum ProductType {
+  COURSE
+  CHROME_EXTENSION
+  SOFTWARE_PLUGIN
+  WORDPRESS_PLUGIN
+  EBOOK
+  DIGITAL_FILE
+}
+
+enum PaymentMethod {
+  SSLCOMMERZ
+  AAMARPAY
+  BKASH
+  BANK_TRANSFER
+  STRIPE
+  PAYPAL
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum AccessType {
+  LIFETIME
+  SUBSCRIPTION
+}
+
+enum MeetingPlatform {
+  ZOOM
+  GOOGLE_MEET
+  OTHER
+}
+
+// ------------------------------------------
+// User & Auth Management
+// ------------------------------------------
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String    @unique
+  passwordHash   String
+  phoneNumber    String?   @db.String
+  avatar         String?
+  role           UserRole  @default(STUDENT)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  orders         Order[]
+  enrollments    Enrollment[]
+  reviews        Review[]
+  certificates   Certificate[]
+  tickets        EventRegistration[]
+  supportTickets SupportTicket[]
+  notifications  Notification[]
+  purchasedProducts ProductPurchase[] 
+
+  // Mentor Relation
+  mentoringCourses Course[] @relation("CourseMentors")
+}
+
+// ------------------------------------------
+// LMS (Learning Management System)
+// ------------------------------------------
+
+model Course {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  slug            String   @unique
+  description     String
+  thumbnail       String?
+  price           Float
+  discountPrice   Float?
+  category        String
+  level           String
+  language        String   @default("Bangla")
+  hasCertificate  Boolean  @default(true)
+  isPublished     Boolean  @default(false)
+  translatedTo    String[] 
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  mentorId        String?  @db.ObjectId
+  mentors User[] @relation("CourseMentors")
+  modules         Module[]
+  enrollments     Enrollment[]
+  reviews         Review[]
+  tags            String[]
+  liveSessions    LiveSession[]
+  exams           Exam[]
+}
+
+// Module & Lesson
+
+model Module {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  order    Int
+  courseId String   @db.ObjectId
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+}
+
+model Lesson {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  type        String
+  videoUrl    String?
+  duration    Int?
+  isFree      Boolean  @default(false)
+  resources   Resource[]
+
+  moduleId    String   @db.ObjectId
+  module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+}
+
+type Resource {
+  title String
+  url   String
+}
+
+// ------------------------------------------
+// Enrollment / Progress
+// ------------------------------------------
+
+model Enrollment {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  courseId       String   @db.ObjectId
+  enrolledAt     DateTime @default(now())
+  
+  completedLessonIds String[] @db.ObjectId
+  progressPercentage Int      @default(0)
+  
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+// ------------------------------------------
+// Digital Marketplace
+// ------------------------------------------
+
+model DigitalProduct {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  slug            String      @unique
+  description     String
+  price           Float
+  discountPrice   Float?
+  productType     ProductType
+  thumbnail       String?
+  fileUrl         String
+  version         String?
+  changelog       String?
+  downloadLimit   Int?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  purchases       ProductPurchase[]
+  licenseKeys     LicenseKey[]
+  reviews         Review[]
+}
+
+model LicenseKey {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  key             String    @unique
+  productId       String    @db.ObjectId
+  product         DigitalProduct @relation(fields: [productId], references: [id])
+  userId          String?   @db.ObjectId
+  isActivated     Boolean   @default(false)
+  activatedAt     DateTime?
+  expiresAt       DateTime?
+}
+
+model ProductPurchase {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id])
+  productId       String   @db.ObjectId
+  product         DigitalProduct @relation(fields: [productId], references: [id])
+  orderId         String   @db.ObjectId
+  order           Order    @relation(fields: [orderId], references: [id])
+  downloadCount   Int      @default(0)
+  purchasedAt     DateTime @default(now())
+}
+
+// ------------------------------------------
+// Orders & Payments
+// ------------------------------------------
+
+model Order {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id])
+  
+  totalAmount     Float
+  discountAmount  Float    @default(0)
+  couponCode      String?
+  
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentMethod   PaymentMethod?
+  transactionId   String?
+
+  items           OrderItem[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  productPurchases ProductPurchase[]
+}
+
+type OrderItem {
+  itemId      String   @db.ObjectId
+  title       String
+  type        String
+  price       Float
+}
+
+model Coupon {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  code        String   @unique
+  discountPercent Float?
+  discountAmount  Float?
+  maxUsage    Int?
+  usedCount   Int      @default(0)
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+}
+
+// ------------------------------------------
+// Exam & Certification
+// ------------------------------------------
+
+model Exam {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  courseId    String   @db.ObjectId
+  course      Course   @relation(fields: [courseId], references: [id])
+  questions   Question[]
+  passMark    Int      @default(80)
+}
+
+type Question {
+  questionText String
+  options      String[]
+  correctIndex Int
+}
+
+model Certificate {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  certificateId  String   @unique
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+  courseId       String   @db.ObjectId
+  issueDate      DateTime @default(now())
+  pdfUrl         String?
+  isApproved     Boolean  @default(false)
+}
+
+// ------------------------------------------
+// Event Management
+// ------------------------------------------
+
+model Event {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  startTime   DateTime
+  endTime     DateTime
+  isOnline    Boolean  @default(true)
+  meetingLink String?
+  location    String?
+  price       Float    @default(0)
+  capacity    Int?
+
+  registrations EventRegistration[]
+}
+
+model EventRegistration {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  eventId     String   @db.ObjectId
+  event       Event    @relation(fields: [eventId], references: [id])
+  
+  attended    Boolean  @default(false)
+  registeredAt DateTime @default(now())
+}
+
+// ------------------------------------------
+// Live Sessions
+// ------------------------------------------
+
+model LiveSession {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  courseId    String?  @db.ObjectId
+  course      Course?  @relation(fields: [courseId], references: [id])
+  
+  platform    MeetingPlatform
+  joinLink    String
+  startTime   DateTime
+  recordLink  String?
+  isNotifySent Boolean @default(false)
+}
+
+// ------------------------------------------
+// Reviews & Support
+// ------------------------------------------
+
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  
+  courseId    String?  @db.ObjectId
+  course      Course?  @relation(fields: [courseId], references: [id])
+  productId   String?  @db.ObjectId
+  product     DigitalProduct? @relation(fields: [productId], references: [id])
+  
+  rating      Int
+  comment     String?
+  videoUrl    String?
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SupportTicket {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  subject     String
+  message     String
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SystemSetting {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  siteName       String
+  logoUrl        String?
+  primaryColor   String?
+  smtpConfig     Json?
+  seoMetadata    Json?
+}
