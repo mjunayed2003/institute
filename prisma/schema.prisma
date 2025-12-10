@@ -88,7 +88,7 @@ model User {
   purchasedProducts ProductPurchase[] 
 
   // Mentor Relation
-  mentoringCourses Course[] @relation("CourseMentors")
+  coursesAsMentor Course[]
 }
 
 // ------------------------------------------
@@ -115,7 +115,7 @@ model Course {
 
   // Relations
   mentorId        String?  @db.ObjectId
-  mentors User[] @relation("CourseMentors")
+  mentor          User?    @relation(fields: [mentorId], references: [id])
   modules         Module[]
   enrollments     Enrollment[]
   reviews         Review[]
