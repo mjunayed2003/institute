@@ -134,46 +134,12 @@ Step	Module	Priority
 
 
 
-
-
-
-
-
-
-
-import { Router } from "express";
-import { userController } from "./user.controller.js";
-import { validate } from "../../../Middleware/validation.js";
-import { loginSchema, registerSchema } from "./user.validation.js";
-import { authenticate, authorize, AuthRequest } from "./user.middleware.js";
-import { UserRole } from "../../../generated/prisma/client.js";
-
-const router = Router();
-
-// Public routes
-router.post("/register", validate(registerSchema), userController.register);
-router.post("/login", validate(loginSchema), userController.login);
-
-// Admin routes
-router.get("/", authenticate, authorize([UserRole.ADMIN]), userController.getUsers);
-router.get("/:id", authenticate, authorize([UserRole.ADMIN]), userController.getOne);
-router.put("/:id", authenticate, authorize([UserRole.ADMIN]), userController.update);
-router.delete("/:id", authenticate, authorize([UserRole.ADMIN]), userController.remove);
-
-// Mentor routes (own profile only)
-router.get("/mentor/profile", authenticate, authorize([UserRole.MENTOR]), async (req: AuthRequest, res) => {
-  const user = await userController.getOne({ params: { id: req.user!.id } } as any, res);
-});
-router.put("/mentor/profile", authenticate, authorize([UserRole.MENTOR]), async (req: AuthRequest, res) => {
-  const user = await userController.update({ params: { id: req.user!.id }, body: req.body } as any, res);
-});
-
-// Student routes (own profile only)
-router.get("/student/profile", authenticate, authorize([UserRole.STUDENT]), async (req: AuthRequest, res) => {
-  const user = await userController.getOne({ params: { id: req.user!.id } } as any, res);
-});
-router.get("/student/courses", authenticate, authorize([UserRole.STUDENT]), async (req: AuthRequest, res) => {
-  const courses = await userController.getOne({ params: { id: req.user!.id } } as any, res); // এখানে enrollment include করে দিতে হবে service এ
-});
-
-export default router;
+⭐ Ready Features
+Feature	Admin	Mentor	Student
+Create course	✅	✅	❌
+Update course	✅	✅	❌
+Delete course	✅	❌	❌
+Assign mentor	✅	❌	❌
+Publish course	✅	❌	❌
+View courses	✅	✅	✅
+View single course	✅	✅	✅
