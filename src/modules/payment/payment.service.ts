@@ -45,23 +45,35 @@ export const paymentService = {
     });
 
     // 4️⃣ SSLCommerz Data
-    const paymentData = {
-      total_amount: order.totalAmount,
-      currency: "BDT",
-      tran_id: order.id,
-      success_url: `${process.env.BASE_URL}/api/payment/success`,
-      fail_url: `${process.env.BASE_URL}/api/payment/fail`,
-      cancel_url: `${process.env.BASE_URL}/api/payment/cancel`,
-      cus_name: user.name,
-      cus_email: user.email,
-    };
+  const fullUser = await prisma.user.findUnique({
+    where: { id: user.id },
+  });
 
-    const response = await sslcommerz.init(paymentData);
+  if (!fullUser) throw new Error("User not found");
 
-    return {
-      paymentUrl: response.GatewayPageURL,
-    };
-  },
+  console.log("Full user:", fullUser);
+
+  // SSLCommerz data
+  const paymentData = {
+    total_amount: order.totalAmount,
+    currency: "BDT",
+    tran_id: order.id,
+    success_url: `${process.env.BASE_URL}/api/payment/success`,
+    fail_url: `${process.env.BASE_URL}/api/payment/fail`,
+    cancel_url: `${process.env.BASE_URL}/api/payment/cancel`,
+    cus_name: fullUser.name,
+    cus_email: fullUser.email,
+    cus_phone: fullUser.phoneNumber,
+    shipping_method: "NO",
+    product_name: course.title,
+  };
+
+  const response = await sslcommerz.init(paymentData);
+
+  return {
+    paymentUrl: response.GatewayPageURL,
+  };
+},
 
   async paymentSuccess(tranId: string, valId: string) {
     const order = await prisma.order.update({
@@ -82,7 +94,10 @@ export const paymentService = {
         progressPercentage: 0,
       },
     });
+
   },
+
+  
 
   async paymentFail(tranId: string) {
     await prisma.order.update({
