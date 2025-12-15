@@ -1,4 +1,4 @@
-import prisma from "../../prisma/client.js";
+import prisma from "../../prisma/client.ts";
 import type { CreateCourseInput, UpdateCourseInput, AssignMentorInput } from "./course.interface.js";
 
 export const courseService = {

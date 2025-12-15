@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import prisma from "../../prisma/client.js";
-import type { CreateUserInput, LoginInput } from "./user.interface.js";
-import { generateToken } from "../../Utility/jwt.js";
+import prisma from "../../prisma/client.ts";
+import type { CreateUserInput, LoginInput } from "./user.interface.ts";
+import { generateToken } from "../../Utility/jwt.ts";
 
 export const userService = {
   async registerUser(data: CreateUserInput) {

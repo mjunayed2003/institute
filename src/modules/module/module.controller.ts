@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { moduleService } from "./module.service.js";
+import { moduleService } from "./module.service.ts";
 
 export const moduleController = {
   // Module

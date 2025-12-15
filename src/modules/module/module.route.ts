@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { moduleController } from "./module.controller.js";
-import { validate } from "../../Middleware/validation.js";
+import { moduleController } from "./module.controller.ts";
+import { validate } from "../../Middleware/validation.ts";
 import { 
   createModuleSchema, updateModuleSchema, 
   createLessonSchema, updateLessonSchema 
-} from "./module.validation.js";
-import { authenticate, authorize } from "../../Middleware/user.middleware.js";
+} from "./module.validation.ts";
+import { authenticate, authorize } from "../../Middleware/user.middleware.ts";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { mentorController } from "./mentor.controller.js";
-import { authenticate, authorize } from "../../../Middleware/user.middleware.js";
+import { mentorController } from "./mentor.controller.ts";
+import { authenticate, authorize } from "../../../Middleware/user.middleware.ts";
 
 const router = Router();
 

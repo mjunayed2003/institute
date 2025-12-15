@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { enrollmentService } from "./enrollment.service.js";
+import { enrollmentService } from "./enrollment.service.ts";
 
 export const enrollmentController = {
   // Enroll student

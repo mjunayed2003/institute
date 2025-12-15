@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { enrollmentController } from "./enrollment.controller.js";
-import { authenticate, authorize } from "../../Middleware/user.middleware.js";
+import { enrollmentController } from "./enrollment.controller.ts";
+import { authenticate, authorize } from "../../Middleware/user.middleware.ts";
 
 const router = Router();
 

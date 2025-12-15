@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { mentorService } from "./mentor.service.js";
+import { mentorService } from "./mentor.service.ts";
 
 export const mentorController = {
   async getProfile(req: Request, res: Response) {

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { studentService } from "./student.service.js";
-import { UserRole } from "../../../../generated/prisma/client.js";
+import { studentService } from "./student.service.ts";
+import { UserRole } from "../../../../generated/prisma/client.ts";
 
 declare global {
   namespace Express {

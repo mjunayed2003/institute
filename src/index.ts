@@ -1,20 +1,27 @@
-import express from 'express';
-import type { Express, Request, Response } from 'express';
-import { setupUserRoutes } from './routes.js'; 
+import "dotenv/config";
+import express from "express";
+import type { Request, Response } from "express";
+import { setupRoutes } from "./routes.ts";
 
-const app: Express = express();
-const PORT: number = 3000;
-
+const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send({ message: 'Welcome to the Express TypeScript App!' });
+// health check
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "API running" });
 });
 
-setupUserRoutes(app); 
+// 🔥 ALL ROUTES
+setupRoutes(app);
 
-// Start the server
+// global error handler
+app.use((err: any, req: Request, res: Response, next: Function) => {
+  console.error(err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+});
+
 app.listen(PORT, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+  console.log(`⚡ Server running at http://localhost:${PORT}`);
 });

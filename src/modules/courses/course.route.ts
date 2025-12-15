@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { courseController } from "./course.controller.js";
-import { validate } from "../../Middleware/validation.js";
-import { authenticate, authorize } from "../../Middleware/user.middleware.js";
-import { createCourseSchema, updateCourseSchema, assignMentorSchema } from "./course.validation.js";
+import { courseController } from "./course.controller.ts";
+import { validate } from "../../Middleware/validation.ts";
+import { authenticate, authorize } from "../../Middleware/user.middleware.ts";
+import { createCourseSchema, updateCourseSchema, assignMentorSchema } from "./course.validation.ts";
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import prisma from "../../../prisma/client.js";
+import prisma from "../../../prisma/client.ts";
 
 export const mentorService = {
   getProfile(userId: string) {

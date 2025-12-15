@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { courseService } from "./course.service.js";
+import { courseService } from "./course.service.ts";
 
 export const courseController = {
   async create(req: Request, res: Response) {

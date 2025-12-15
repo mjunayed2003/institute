@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { userController } from "./user.controller.js";
-import { validate } from "../../Middleware/validation.js";
-import { registerSchema, loginSchema } from "./user.validation.js";
-import AdminRouter from "./admin/admin.route.js";
-import MentorRouter from "./mentor/mentor.route.js";
-import StudentRouter from "./student/student.route.js";
+import { userController } from "./user.controller.ts";
+import { validate } from "../../Middleware/validation.ts";
+import { registerSchema, loginSchema } from "./user.validation.ts";
+import AdminRouter from "./admin/admin.route.ts";
+import MentorRouter from "./mentor/mentor.route.ts";
+import StudentRouter from "./student/student.route.ts";
 
 const router = Router();
 

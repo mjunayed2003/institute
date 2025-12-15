@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { studentService } from "./student.service.js";
+import { studentService } from "./student.service.ts";
 
 export const studentController = {
   async getDashboard(req: Request, res: Response) {
