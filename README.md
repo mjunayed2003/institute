@@ -14,11 +14,6 @@ A complete **Learning Management System (LMS)** and **Digital Product Marketplac
 * **Payment Gateways (Planned / Integrated)**:
 
   * SSLCommerz
-  * AamarPay
-  * bKash
-  * Stripe
-  * PayPal
-
 ---
 
 ## 📂 Project Structure
