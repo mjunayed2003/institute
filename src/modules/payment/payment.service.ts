@@ -1,8 +1,9 @@
 import prisma from "../../prisma/client.ts";
 import { sslcommerz } from "./sslcommerz.helper.ts";
+import type { AuthUser } from "../../Middleware/user.middleware.ts";
 
 export const paymentService = {
-  async initiatePayment(user: any, courseId: string) {
+  async initiatePayment(user: AuthUser, courseId: string) {
     // 1️⃣ Course check
     const course = await prisma.course.findUnique({
       where: { id: courseId },
@@ -71,7 +72,7 @@ export const paymentService = {
   const response = await sslcommerz.init(paymentData);
 
   return {
-    paymentUrl: response.GatewayPageURL,
+    paymentUrl: response.GatewayPageURL, 
   };
 },
 
