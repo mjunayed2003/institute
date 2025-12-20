@@ -6,7 +6,7 @@ export declare const studentService: {
             email: string;
             phoneNumber: string | null;
             avatar: string | null;
-            role: import("../../../generated/prisma/enums.ts").UserRole;
+            role: import("@prisma/client").$Enums.UserRole;
             createdAt: Date;
         };
         courses: {

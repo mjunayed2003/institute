@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { UserRole } from '../../generated/prisma/client.ts';
+import { UserRole } from "@prisma/client";
 export interface AuthUser {
     id: string;
     role: UserRole;

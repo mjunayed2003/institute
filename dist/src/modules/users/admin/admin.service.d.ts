@@ -1,57 +1,51 @@
 export declare const adminService: {
-    getAllUsers(): import("../../../../generated/prisma/internal/prismaNamespace.ts").PrismaPromise<{
+    getAllUsers(): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         name: string;
         email: string;
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../../generated/prisma/enums.ts").UserRole;
+        role: import("@prisma/client").$Enums.UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
-    getUser(id: string): import("../../../../generated/prisma/models.ts").Prisma__UserClient<{
+    getUser(id: string): import("@prisma/client").Prisma.Prisma__UserClient<{
         id: string;
         name: string;
         email: string;
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../../generated/prisma/enums.ts").UserRole;
+        role: import("@prisma/client").$Enums.UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, {
-        omit: import("../../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
-    }>;
-    updateUser(id: string, data: any): import("../../../../generated/prisma/models.ts").Prisma__UserClient<{
+    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    updateUser(id: string, data: any): import("@prisma/client").Prisma.Prisma__UserClient<{
         id: string;
         name: string;
         email: string;
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../../generated/prisma/enums.ts").UserRole;
+        role: import("@prisma/client").$Enums.UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, {
-        omit: import("../../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
-    }>;
-    deleteUser(id: string): import("../../../../generated/prisma/models.ts").Prisma__UserClient<{
+    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    deleteUser(id: string): import("@prisma/client").Prisma.Prisma__UserClient<{
         id: string;
         name: string;
         email: string;
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../../generated/prisma/enums.ts").UserRole;
+        role: import("@prisma/client").$Enums.UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, {
-        omit: import("../../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
-    }>;
+    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 };
 //# sourceMappingURL=admin.service.d.ts.map

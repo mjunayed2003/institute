@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { UserRole } from "../../../../generated/prisma/client.ts";
+import { UserRole } from "@prisma/client";
 declare global {
     namespace Express {
         interface Request {

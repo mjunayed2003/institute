@@ -11,7 +11,6 @@ export declare const enrollmentService: {
     checkEnrollment(userId: string, courseId: string): Promise<boolean>;
     getMyCourses(userId: string): Promise<({
         course: {
-            level: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
@@ -22,6 +21,7 @@ export declare const enrollmentService: {
             price: number;
             discountPrice: number | null;
             category: string;
+            level: string;
             language: string;
             hasCertificate: boolean;
             isPublished: boolean;

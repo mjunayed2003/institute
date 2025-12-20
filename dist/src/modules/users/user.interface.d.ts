@@ -1,4 +1,4 @@
-import { UserRole } from "../../../generated/prisma/client.ts";
+import { UserRole } from "@prisma/client";
 export interface CreateUserInput {
     name: string;
     email: string;

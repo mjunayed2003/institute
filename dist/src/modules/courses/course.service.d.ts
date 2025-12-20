@@ -1,7 +1,6 @@
 import type { CreateCourseInput, UpdateCourseInput, AssignMentorInput } from "./course.interface.js";
 export declare const courseService: {
     createCourse(data: CreateCourseInput, creatorId: string): Promise<{
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -12,6 +11,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -27,13 +27,12 @@ export declare const courseService: {
             passwordHash: string;
             phoneNumber: string | null;
             avatar: string | null;
-            role: import("../../../generated/prisma/enums.ts").UserRole;
+            role: import("@prisma/client").$Enums.UserRole;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
         } | null;
     } & {
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -44,6 +43,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -59,7 +59,7 @@ export declare const courseService: {
             passwordHash: string;
             phoneNumber: string | null;
             avatar: string | null;
-            role: import("../../../generated/prisma/enums.ts").UserRole;
+            role: import("@prisma/client").$Enums.UserRole;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -71,7 +71,6 @@ export declare const courseService: {
             order: number;
         }[];
     } & {
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -82,6 +81,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -90,7 +90,6 @@ export declare const courseService: {
         mentorId: string | null;
     }) | null>;
     updateCourse(id: string, data: UpdateCourseInput): Promise<{
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -101,6 +100,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -109,7 +109,6 @@ export declare const courseService: {
         mentorId: string | null;
     }>;
     deleteCourse(id: string): Promise<{
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -120,6 +119,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -128,7 +128,6 @@ export declare const courseService: {
         mentorId: string | null;
     }>;
     togglePublish(courseId: string, status: boolean): Promise<{
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -139,6 +138,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
@@ -147,7 +147,6 @@ export declare const courseService: {
         mentorId: string | null;
     }>;
     assignMentor(data: AssignMentorInput): Promise<{
-        level: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -158,6 +157,7 @@ export declare const courseService: {
         price: number;
         discountPrice: number | null;
         category: string;
+        level: string;
         language: string;
         hasCertificate: boolean;
         isPublished: boolean;
