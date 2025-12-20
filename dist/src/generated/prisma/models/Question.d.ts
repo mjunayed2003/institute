@@ -1,0 +1,98 @@
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace.ts";
+/**
+ * Model Question
+ *
+ */
+export type QuestionModel = runtime.Types.Result.DefaultSelection<Prisma.$QuestionPayload>;
+export type QuestionCompositeListFilter = {
+    equals?: Prisma.QuestionObjectEqualityInput[];
+    every?: Prisma.QuestionWhereInput;
+    some?: Prisma.QuestionWhereInput;
+    none?: Prisma.QuestionWhereInput;
+    isEmpty?: boolean;
+    isSet?: boolean;
+};
+export type QuestionOrderByCompositeAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type QuestionListCreateEnvelopeInput = {
+    set?: Prisma.QuestionCreateInput | Prisma.QuestionCreateInput[];
+};
+export type QuestionListUpdateEnvelopeInput = {
+    set?: Prisma.QuestionCreateInput | Prisma.QuestionCreateInput[];
+    push?: Prisma.QuestionCreateInput | Prisma.QuestionCreateInput[];
+    updateMany?: Prisma.QuestionUpdateManyInput;
+    deleteMany?: Prisma.QuestionDeleteManyInput;
+};
+export type QuestionWhereInput = {
+    AND?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[];
+    OR?: Prisma.QuestionWhereInput[];
+    NOT?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[];
+    questionText?: Prisma.StringFilter<"Question"> | string;
+    options?: Prisma.StringNullableListFilter<"Question">;
+    correctIndex?: Prisma.IntFilter<"Question"> | number;
+};
+export type QuestionCreateoptionsInput = {
+    set: string[];
+};
+export type QuestionUpdateManyInput = {
+    where: Prisma.QuestionWhereInput;
+    data: Prisma.QuestionUpdateInput;
+};
+export type QuestionDeleteManyInput = {
+    where: Prisma.QuestionWhereInput;
+};
+export type QuestionUpdateInput = {
+    questionText?: Prisma.StringFieldUpdateOperationsInput | string;
+    options?: Prisma.QuestionUpdateoptionsInput | string[];
+    correctIndex?: Prisma.IntFieldUpdateOperationsInput | number;
+};
+export type QuestionUpdateoptionsInput = {
+    set?: string[];
+    push?: string | string[];
+};
+export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    questionText?: boolean;
+    options?: boolean;
+    correctIndex?: boolean;
+}, ExtArgs["result"]["question"]>;
+export type QuestionSelectScalar = {
+    questionText?: boolean;
+    options?: boolean;
+    correctIndex?: boolean;
+};
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"questionText" | "options" | "correctIndex", ExtArgs["result"]["question"]>;
+export type $QuestionPayload = {
+    name: "Question";
+    objects: {};
+    scalars: {
+        questionText: string;
+        options: string[];
+        correctIndex: number;
+    };
+    composites: {};
+};
+export type QuestionGetPayload<S extends boolean | null | undefined | QuestionDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$QuestionPayload, S>;
+/**
+ * Fields of the Question model
+ */
+export interface QuestionFieldRefs {
+    readonly questionText: Prisma.FieldRef<"Question", 'String'>;
+    readonly options: Prisma.FieldRef<"Question", 'String[]'>;
+    readonly correctIndex: Prisma.FieldRef<"Question", 'Int'>;
+}
+/**
+ * Question without action
+ */
+export type QuestionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: Prisma.QuestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: Prisma.QuestionOmit<ExtArgs> | null;
+};
+//# sourceMappingURL=Question.d.ts.map

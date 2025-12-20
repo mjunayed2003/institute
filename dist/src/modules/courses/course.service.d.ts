@@ -27,7 +27,7 @@ export declare const courseService: {
             passwordHash: string;
             phoneNumber: string | null;
             avatar: string | null;
-            role: import("../../../generated/prisma/enums.ts").UserRole;
+            role: import("../../generated/prisma/enums.ts").UserRole;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
@@ -59,7 +59,7 @@ export declare const courseService: {
             passwordHash: string;
             phoneNumber: string | null;
             avatar: string | null;
-            role: import("../../../generated/prisma/enums.ts").UserRole;
+            role: import("../../generated/prisma/enums.ts").UserRole;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
