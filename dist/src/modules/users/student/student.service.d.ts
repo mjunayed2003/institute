@@ -1,5 +1,5 @@
 export declare const studentService: {
-    getProfile(userId: string): import("../../../generated/prisma/models.ts").Prisma__UserClient<({
+    getProfile(userId: string): import("../../../../generated/prisma/models.ts").Prisma__UserClient<({
         enrollments: ({
             course: {
                 level: string;
@@ -35,26 +35,26 @@ export declare const studentService: {
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../generated/prisma/enums.ts").UserRole;
+        role: import("../../../../generated/prisma/enums.ts").UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
     }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
+        omit: import("../../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
     }>;
-    updateProfile(userId: string, data: any): import("../../../generated/prisma/models.ts").Prisma__UserClient<{
+    updateProfile(userId: string, data: any): import("../../../../generated/prisma/models.ts").Prisma__UserClient<{
         id: string;
         name: string;
         email: string;
         passwordHash: string;
         phoneNumber: string | null;
         avatar: string | null;
-        role: import("../../../generated/prisma/enums.ts").UserRole;
+        role: import("../../../../generated/prisma/enums.ts").UserRole;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
+        omit: import("../../../../generated/prisma/internal/prismaNamespace.ts").GlobalOmitConfig | undefined;
     }>;
 };
 //# sourceMappingURL=student.service.d.ts.map

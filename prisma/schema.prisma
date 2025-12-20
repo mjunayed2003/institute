@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -16,7 +16,7 @@ datasource db {
 
 
 // ------------------------------------------
-// Enums (ফিক্সড অপশনসমূহ)
+// Enums 
 // ------------------------------------------
 
 enum UserRole {
